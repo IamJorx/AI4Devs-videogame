@@ -3,7 +3,7 @@ const TILE_SIZE = 100;
 const config = {
     type: Phaser.AUTO,
     width: TILE_SIZE * 8,
-    height: TILE_SIZE * 6,
+    height: TILE_SIZE * 6 + 100,
     parent: 'game-container',
     backgroundColor: '#ecf0f1',
     scene: {
@@ -26,6 +26,10 @@ let currentHue = 0;
 const hueStep = 137.5;
 let popupVisible = false;
 let instructionsVisible = true;
+let timerText;
+let resetButton;
+let menuVisible = false;
+let timerRunning = false;
 
 function preload() {
     this.load.json('levels', 'levels.json');
@@ -33,20 +37,19 @@ function preload() {
 
 function create() {
     levelsData = this.cache.json.get('levels');
-    
+
     this.add.graphics()
         .fillStyle(0x34495e, 1)
-        .fillRoundedRect(0, 0, config.width, config.height, 20)
+        .fillRoundedRect(0, 0, config.width, TILE_SIZE * 6, 20)
         .setDepth(0);
 
+    createMenu.call(this);
     showInstructions.call(this);
 
     this.input.on('pointerdown', (pointer) => {
         if (instructionsVisible) {
             hideInstructions.call(this);
             loadLevel.call(this, currentLevel);
-            startTime = Date.now();
-            instructionsVisible = false;
             return;
         }
         if (popupVisible) return;
@@ -65,6 +68,32 @@ function create() {
     });
 }
 
+function createMenu() {
+    const menuY = TILE_SIZE * 6;
+
+    timerText = this.add.text(20, menuY + 20, 'Time: 0.00', { fontSize: '20px', fill: '#34495e' }).setDepth(1).setVisible(false);
+
+    resetButton = this.add.text(config.width - 150, menuY + 20, 'Reset Level', { fontSize: '20px', fill: '#ffffff', backgroundColor: '#3498db', padding: { x: 10, y: 5 }, borderRadius: 5 })
+        .setDepth(1)
+        .setInteractive()
+        .setVisible(false)
+        .on('pointerdown', () => {
+            loadLevel.call(this, currentLevel);
+        });
+}
+
+function showMenu() {
+    timerText.setVisible(true);
+    resetButton.setVisible(true);
+    menuVisible = true;
+}
+
+function hideMenu() {
+    timerText.setVisible(false);
+    resetButton.setVisible(false);
+    menuVisible = false;
+}
+
 function showInstructions() {
     const margin = 80;
     const popupWidth = 600;
@@ -76,13 +105,13 @@ function showInstructions() {
     instructionsPopup.fillStyle(0xecf0f1, 0.9);
     instructionsPopup.fillRoundedRect(popupX, popupY, popupWidth, popupHeight, 20);
 
-    const titleText = this.add.text(config.width / 2, popupY + margin, 'Rush Hour!', 
+    const titleText = this.add.text(config.width / 2, popupY + margin, 'Rush Hour!',
         { fontSize: '40px', fill: '#34495e', align: 'center' })
         .setOrigin(0.5)
         .setDepth(3);
 
-    const instructionsText = this.add.text(config.width / 2, popupY + (popupHeight + margin) / 2, 
-        'Reach the exit with the highlighted car to complete the level!\n\nClick on any vehicle to move it.\n\n\n\nClick anywhere to start!', 
+    const instructionsText = this.add.text(config.width / 2, popupY + (popupHeight + margin) / 2,
+        'Reach the exit with the highlighted car to complete the level!\n\nClick on any vehicle to move it.\n\n\n\nClick anywhere to start!',
         { fontSize: '20px', fill: '#34495e', align: 'center', wordWrap: { width: popupWidth - 2 * margin } })
         .setOrigin(0.5)
         .setDepth(3);
@@ -96,6 +125,7 @@ function hideInstructions() {
     this.instructionsPopup.destroy();
     this.instructionsText.destroy();
     this.titleText.destroy();
+    instructionsVisible = false;
 }
 
 function loadLevel(levelNumber) {
@@ -104,6 +134,7 @@ function loadLevel(levelNumber) {
     vehicles = [];
     selectedVehicle = null;
     clearHighlights.call(this);
+    currentHue = 0;
     if (this.exit) {
         this.exit.destroy();
     }
@@ -135,8 +166,12 @@ function loadLevel(levelNumber) {
     });
 
     this.exit = this.add.graphics({ fillStyle: { color: 0xe74c3c } }).setDepth(1);
-    this.exit.fillRoundedRect(level.exit.x * TILE_SIZE, level.exit.y * TILE_SIZE, TILE_SIZE, TILE_SIZE, 20); // Add rounded corners to the exit
+    this.exit.fillRoundedRect(level.exit.x * TILE_SIZE, level.exit.y * TILE_SIZE, TILE_SIZE, TILE_SIZE, 20);
     this.exitBounds = new Phaser.Geom.Rectangle(level.exit.x * TILE_SIZE, level.exit.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+
+    startTime = Date.now();
+    timerRunning = true;
+    showMenu();
 }
 
 function getRandomColor() {
@@ -145,10 +180,10 @@ function getRandomColor() {
 }
 
 function update() {
-    // Game logic goes here
-    vehicles.forEach(vehicle => {
-        // Update vehicle positions or other properties if needed
-    });
+    if (menuVisible && timerRunning) {
+        const elapsedTime = ((Date.now() - startTime) / 1000).toFixed(2);
+        timerText.setText(`Time: ${elapsedTime}`);
+    }
 }
 
 function findVehicle(x, y) {
@@ -218,24 +253,38 @@ function moveVehicle(x, y) {
 
     if (validPosition) {
         const bounds = selectedVehicle.bounds;
+        let newX = bounds.x;
+        let newY = bounds.y;
+
         if (selectedVehicle.orientation === 'horizontal') {
             if (x < bounds.x / TILE_SIZE) {
-                bounds.x = x * TILE_SIZE;
+                newX = x * TILE_SIZE;
             } else {
-                bounds.x = x * TILE_SIZE - bounds.width + TILE_SIZE;
+                newX = x * TILE_SIZE - bounds.width + TILE_SIZE;
             }
         } else {
             if (y < bounds.y / TILE_SIZE) {
-                bounds.y = y * TILE_SIZE;
+                newY = y * TILE_SIZE;
             } else {
-                bounds.y = y * TILE_SIZE - bounds.height + TILE_SIZE;
+                newY = y * TILE_SIZE - bounds.height + TILE_SIZE;
             }
         }
-        const size = { width: bounds.width, height: bounds.height };
-        updateVehiclePosition(selectedVehicle, bounds.x / TILE_SIZE, bounds.y / TILE_SIZE, size);
-        clearHighlights.call(this);
-        checkForCompletion.call(this, selectedVehicle);
-        selectedVehicle = null;
+
+        let vehicle = selectedVehicle
+        this.tweens.add({
+            targets: bounds,
+            x: newX,
+            y: newY,
+            duration: 500,
+            onUpdate: () => {
+                updateVehiclePosition(vehicle, bounds.x / TILE_SIZE, bounds.y / TILE_SIZE, { width: bounds.width, height: bounds.height });
+            },
+            onComplete: () => {
+                clearHighlights.call(this);
+                checkForCompletion.call(this, vehicle);
+                selectedVehicle = null;
+            }
+        });
     }
 }
 
@@ -244,7 +293,7 @@ function updateVehiclePosition(vehicle, x, y, size) {
     vehicle.graphics.clear();
     if (vehicle.isTarget) {
         // Add a border and a different fill pattern for the target vehicle
-        vehicle.graphics.lineStyle(10, 0x3498db, 1);
+        vehicle.graphics.lineStyle(10, 0xe74c3c, 1);
         vehicle.graphics.strokeRoundedRect(x * TILE_SIZE + margin, y * TILE_SIZE + margin, size.width - 2 * margin, size.height - 2 * margin, 20);
         vehicle.graphics.fillStyle(0xffff00, 1);
         vehicle.graphics.fillRoundedRect(x * TILE_SIZE + margin, y * TILE_SIZE + margin, size.width - 2 * margin, size.height - 2 * margin, 20);
@@ -265,6 +314,7 @@ function checkForCompletion(vehicle) {
             const endTime = Date.now();
             const completionTime = ((endTime - startTime) / 1000).toFixed(2);
             completedLevels++;
+            timerRunning = false; // Stop the timer
             showSuccessPopup.call(this, completionTime);
         }
     }
