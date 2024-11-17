@@ -1,3 +1,26 @@
+# Creación del prompt inicial
+
+**Herramienta usada: ChatGPT 4o**
+
+1. I want to create a web game based on the Rush Hour game. Help me generate a prompt that can be used to create the game
+
+2. Let's make the game more simple. The game will only have one screen, which will already contain the level to be played. The screen will also contain score tracking based on how fast the player completed levels, a counter for how many levels in a row the user was able to complete, and a "Give up" button that gives the player a new level but resets all progress and score.
+
+3. It is very important that game levels are possible to be finished. Make sure to include tests to check that both that and the rest of the functionality of the game works properly.
+
+4. Make the deliverable as small as possible, with the minimum number of files possible. (e.g. one for html, one for style, one for level definitions)
+
+5. Remove the additional features
+
+6. Change the score to be higher when the player finishes with the least amount of time
+
+7. Use a game engine to simplify development, and use best practices when writing code.
+
+8. Clearly define phaser as the engine to be used.
+
+
+## Output
+
 Create a web-based puzzle game inspired by the classic **Rush Hour** game. Players must navigate a gridlocked parking lot by moving cars and trucks to clear the path for a designated vehicle to exit the grid. The game should be engaging, visually appealing, and intuitive, presented as a single-screen experience.
 
 **Key Features:**
@@ -58,3 +81,61 @@ Create a web-based puzzle game inspired by the classic **Rush Hour** game. Playe
 5. A single JSON file defining level configurations, all validated to be solvable.
 6. Automated testing suite to ensure functionality and level solvability.
 
+
+# Referencia para el diseño
+
+**Herramienta usada: EngineerGPT**
+
+Create a UI for a "rush hour" style web game.
+
+![Diseño Referencia](diseño-referencia.png)
+
+
+# Implementación del juego
+
+**Herramienta usada: Github Copilot**
+
+1. As a professional videogame developer, [pasted prompt from ChatGPT]. Do not start until told to.
+
+2. #file:game.js #file:index.html #file:levels.json Let's start creating the game. Prepare the structure to render the game and load the first level. Remember to use the phaser library.
+
+
+## Uso del modo "Edit with Copilot" (preview)
+
+En este punto, empecé a utilizar el modo "Edit with Copilot", que permite editar ficheros inline de forma similar al funcionamiento de Cursor. Sin embargo, perdí buena parte de los prompts y no hay manera de ver el historial en este modo.
+
+Añado todos los prompts que pude rescatar.
+
+1. Add a blinking effect to the highlighted tiles
+
+2. Add an instructions screen at the beginning of the game explaining how it works
+
+3. Make the "Rush hour!" text bigger than the rest
+
+4. Change the movement of the vehicles to be smooth instead of immediate
+
+5. Add a lot more vehicles to the two levels.
+
+6. Scramble the vehicles. make sure they do not overlap
+
+7. Add a menu below the play area by making the game height taller. This menu area should contain a timer with the current level time, and a button to reset the level, without resetting level time.
+
+8. Only show the time and reset button once a level is loaded
+
+9. timerText is not initialized yet in the update function
+
+10. Make the vehicle colors not random. The color must always be the same between loads
+
+11. The timer should stop once the level is completed
+
+13. Ad a moves counter to the menu. It should be reset on level load, and be shown in the success screen just like the timer.
+
+14. Move the moves display to the right of the timer
+
+15. The instructions popup is not centered vertically
+
+# Resultado final
+
+![Instrucciones](resultado/instrucciones.png)
+![Juego](resultado/juego.png)
+![Victoria](resultado/victoria.png)

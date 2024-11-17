@@ -30,6 +30,8 @@ let timerText;
 let resetButton;
 let menuVisible = false;
 let timerRunning = false;
+let movesCounter;
+let moves = 0;
 
 function preload() {
     this.load.json('levels', 'levels.json');
@@ -73,6 +75,8 @@ function createMenu() {
 
     timerText = this.add.text(20, menuY + 20, 'Time: 0.00', { fontSize: '20px', fill: '#34495e' }).setDepth(1).setVisible(false);
 
+    movesCounter = this.add.text(200, menuY + 20, 'Moves: 0', { fontSize: '20px', fill: '#34495e' }).setDepth(1).setVisible(false);
+
     resetButton = this.add.text(config.width - 150, menuY + 20, 'Reset Level', { fontSize: '20px', fill: '#ffffff', backgroundColor: '#3498db', padding: { x: 10, y: 5 }, borderRadius: 5 })
         .setDepth(1)
         .setInteractive()
@@ -84,12 +88,14 @@ function createMenu() {
 
 function showMenu() {
     timerText.setVisible(true);
+    movesCounter.setVisible(true);
     resetButton.setVisible(true);
     menuVisible = true;
 }
 
 function hideMenu() {
     timerText.setVisible(false);
+    movesCounter.setVisible(false);
     resetButton.setVisible(false);
     menuVisible = false;
 }
@@ -99,7 +105,7 @@ function showInstructions() {
     const popupWidth = 600;
     const popupHeight = 400;
     const popupX = (config.width - popupWidth) / 2;
-    const popupY = (config.height - popupHeight) / 2;
+    const popupY = (config.height - popupHeight) / 2 - 50;
 
     const instructionsPopup = this.add.graphics().setDepth(3);
     instructionsPopup.fillStyle(0xecf0f1, 0.9);
@@ -171,6 +177,8 @@ function loadLevel(levelNumber) {
 
     startTime = Date.now();
     timerRunning = true;
+    moves = 0;
+    movesCounter.setText('Moves: 0');
     showMenu();
 }
 
@@ -252,6 +260,8 @@ function moveVehicle(x, y) {
     const validPosition = highlightTiles.find(tile => tile.bounds.contains((x + 0.5) * TILE_SIZE, (y + 0.5) * TILE_SIZE));
 
     if (validPosition) {
+        moves++;
+        movesCounter.setText(`Moves: ${moves}`);
         const bounds = selectedVehicle.bounds;
         let newX = bounds.x;
         let newY = bounds.y;
@@ -332,7 +342,7 @@ function showSuccessPopup(completionTime) {
     popup.fillStyle(0xecf0f1, 0.9); // Use a lighter background color
     popup.fillRoundedRect(popupX, popupY, popupWidth, popupHeight, 20);
 
-    const text = this.add.text(config.width / 2, popupY + popupHeight / 2 - margin, `Level completed in ${completionTime} seconds!\nLevels completed: ${completedLevels}`, { fontSize: '20px', fill: '#34495e', align: 'center' }).setOrigin(0.5).setDepth(3);
+    const text = this.add.text(config.width / 2, popupY + popupHeight / 2 - margin, `Level completed!\n\n Time: ${completionTime}s\nMoves: ${moves}\nLevel streak: ${completedLevels}`, { fontSize: '20px', fill: '#34495e', align: 'center' }).setOrigin(0.5).setDepth(3);
 
     const buttonGraphics = this.add.graphics().setDepth(3);
     buttonGraphics.fillStyle(0x3498db, 1); // Change button color to blue
