@@ -1,0 +1,11 @@
+/pepsiman-game
+    index.html
+    /css
+        style.css
+    /js
+        game.js
+        player.js
+        obstacles.js
+        screens.js
+    /assets
+        /images 
