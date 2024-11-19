@@ -1,13 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ice Climber Game</title>
+    <title>Índice de Juegos - AI4Devs</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="gameContainer">
+    <div id="game-index">
+        <h1>Selecciona tu juego</h1>
+        <ul>
+            <li><a href="snake-EHS/index.html">Snake</a></li>
+            <li><a href="game-OGM/index.html">Rush Hour</a></li>
+            <li><a href="ballshooter-FLC/index.html">Ball Shooter Game - Felipe Londoño Cardona</a></li>
+        </ul>
+    </div>
+      <div id="gameContainer">
         <canvas id="gameCanvas"></canvas>
         <div id="score">Score: 0</div>
         <div id="gameOver">
@@ -16,7 +23,8 @@
             <button id="restartButton">Play Again</button>
         </div>
     </div>
-
-    <script src="index.js"></script>
+    <footer>
+        <p>© AI4Devs students</p>
+    </footer>
 </body>
 </html>
