@@ -95,3 +95,106 @@ the necessary images ara in this paths ./src/images/backgrounds and ./src/images
 
 we are going to create only one level in this phase
 ```
+
+```
+Would you like me to implement a specific level progression system? (e.g., 3 levels with increasing difficulty, or a more dynamic system?) -> yes, 3 levels whith increasing difficulty
+Do you want to include a scoring system? If so, what should be the scoring criteria? (time-based, accuracy-based, or both?) -> yes, impelement scoring system, base on elements finded and the time taken to finded them
+Should we implement a hint system to help players when they're stuck? -> yes
+Do you want to include sound effects and background music? -> yes, mistery music
+Should we implement a time limit for each level? -> yes
+Would you like to include any power-ups or special abilities? (e.g., magnifying glass, highlight all objects for 3 seconds, etc.) -> yes, magnifying glass
+```
+
+```
+these are the next steps:
+
+We need to create the hidden objects system
+Implement the magnifying glass power-up functionality
+Create the menu scene
+Add scoring system
+Implement hint system
+Would you like me to continue with any of these specific implementations? Also, you'll need to provide or specify:
+
+A list of specific objects to hide in each level UI assets (buttons, icons, etc.) Background images for each level Sound effects and background music
+
+lets start with the first step: create the hidden objects systems the necessary images ara in this paths ./src/images/backgrounds and ./src/images/objects.
+
+we are going to create only one level in this phase
+```
+
+```
+yes continue with importing the necesary images into bootscene. use the images placed in /assets/images there are one background image and four objects
+```
+
+```
+into backgrounds folder i hava an imagen called "old_room.png" and into objects folder i have this images: candle.png, feather.png, hourglass.png and pocket_watch.png
+```
+
+```
+ok, lets continue, currently i can not see nothing when i open the index.html in website browser. can you fix that.
+```
+
+```
+Failed to load resource: the server responded with a status of 404 (Not Found) styles.css
+```
+
+```
+Uncaught SyntaxError: The requested module './scenes/MenuScene.js' does not provide an export named 'MenuScene' (at game.js:3:10)
+```
+
+```
+Uncaught SyntaxError: The requested module './scenes/MenuScene.js' does not provide an export named 'MenuScene' (at game.js:3:10)
+```
+
+```
+phaser.min.js:1 Uncaught TypeError: The listener must be a function at r (phaser.min.js:1:6586) at o.on (phaser.min.js:1:8422) at GameScene.setupUI (GameScene.js:77:14) at GameScene.create (GameScene.js:26:14) at initialize.create (phaser.min.js:1:491015) at initialize.bootScene (phaser.min.js:1:490425) at initialize.start (phaser.min.js:1:494019) at initialize.processQueue (phaser.min.js:1:489078) at initialize.update (phaser.min.js:1:490562) at initialize.step (phaser.min.js:1:793006)
+```
+
+```
+GameScene.js:37 Uncaught TypeError: this.setupMagnifyingGlass is not a function at GameScene.create (GameScene.js:37:14) at initialize.create (phaser.min.js:1:491015) at initialize.bootScene (phaser.min.js:1:490425) at initialize.start (phaser.min.js:1:494019) at initialize.processQueue (phaser.min.js:1:489078) at initialize.update (phaser.min.js:1:490562) at initialize.step (phaser.min.js:1:793006) at initialize.step (phaser.min.js:1:433503) at t (phaser.min.js:1:434427)
+```
+
+```
+the objects are super huge, can you resize them, make them smaller
+```
+
+```
+ok, now can you fix some details: the timer is overlapping the score.
+```
+
+```
+perfect, now can you add the object images beside the objects to find?
+```
+
+```
+give more space to the right section (list of items). the objects are too close actually
+```
+
+```
+excellent. now can you place the hourglass object at bottom left
+```
+
+```
+can you clean the list of items to find, when the game finished?
+```
+
+```
+can you clean the list of items to find, when the game finished?
+```
+
+```
+can you make the objects a little opaque
+```
+
+```
+can you delete the score
+```
+
+```
+set the time to 30 seconds
+```
+
+
+```
+can you reset the find items list when game over?
+```

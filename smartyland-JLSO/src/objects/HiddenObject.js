@@ -4,7 +4,8 @@ export class HiddenObject extends Phaser.GameObjects.Image {
         
         this.setInteractive();
         this.found = false;
-        this.setScale(0.5); // Adjust scale as needed
+        this.setScale(0.08); // Changed from 0.1 to 0.08 for smaller size
+        this.setAlpha(0.6); // Add initial transparency (0.6 = 60% opacity)
         
         this.on('pointerdown', this.onObjectClick, this);
         this.on('pointerover', this.onHover, this);
@@ -16,18 +17,21 @@ export class HiddenObject extends Phaser.GameObjects.Image {
             this.found = true;
             this.scene.onObjectFound(this);
             this.setTint(0x00ff00); // Green tint when found
+            this.setAlpha(1); // Fully visible when found
         }
     }
 
     onHover() {
         if (!this.found) {
-            this.setScale(0.55); // Slightly larger on hover
+            this.setScale(0.09); // Changed from 0.12 to 0.09 for hover effect
+            this.setAlpha(0.8); // More visible on hover
         }
     }
 
     onHoverOut() {
         if (!this.found) {
-            this.setScale(0.5); // Return to normal size
+            this.setScale(0.08); // Changed from 0.1 to 0.08 to match initial scale
+            this.setAlpha(0.6); // Return to initial transparency
         }
     }
 }

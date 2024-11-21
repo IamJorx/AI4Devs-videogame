@@ -1,9 +1,8 @@
-
 export const GAME_CONFIG = {
     LEVELS: [
         {
             name: 'Messy Room',
-            timeLimit: 180, // 3 minutes
+            timeLimit: 30, // Changed from 180 to 30 seconds
             objectsToFind: 5,
             difficulty: 1
         },
